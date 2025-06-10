@@ -1,39 +1,41 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SignUpPage = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setError("");
-    setSuccess("");
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
+    if (!name || !email || !password || !confirmPassword) {
       setError("All fields are required.");
       return;
     }
-    if (form.password !== form.confirmPassword) {
+    if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-    // Simulate successful signup
     setSuccess("Sign up successful!");
-    setForm({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    const newuser = { name, email, password };
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/register`, newuser);
+      if (response.status === 201) {
+        setSuccess("Sign up successful!");
+        setError("");
+        setTimeout(() => {
+          navigate("/home");
+        }, 2000);
+      }
+    } catch (error) {
+      setError("An error occurred during sign up. Please try again.");
+      console.error("Sign up error:", error);
+    }
   };
 
   return (
@@ -45,8 +47,8 @@ const SignUpPage = () => {
           <input
             type="text"
             name="name"
-            value={form.name}
-            onChange={handleChange}
+            value={name}
+            onChange={e => setName(e.target.value)}
             style={{ width: "100%", padding: 8, marginTop: 4 }}
             autoComplete="off"
           />
@@ -56,8 +58,8 @@ const SignUpPage = () => {
           <input
             type="email"
             name="email"
-            value={form.email}
-            onChange={handleChange}
+            value={email}
+            onChange={e => setEmail(e.target.value)}
             style={{ width: "100%", padding: 8, marginTop: 4 }}
             autoComplete="off"
           />
@@ -67,8 +69,8 @@ const SignUpPage = () => {
           <input
             type="password"
             name="password"
-            value={form.password}
-            onChange={handleChange}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
             style={{ width: "100%", padding: 8, marginTop: 4 }}
             autoComplete="new-password"
           />
@@ -78,8 +80,8 @@ const SignUpPage = () => {
           <input
             type="password"
             name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
             style={{ width: "100%", padding: 8, marginTop: 4 }}
             autoComplete="new-password"
           />

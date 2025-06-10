@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const AdminLoginPage = () => {
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -11,50 +12,69 @@ const AdminLoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Replace with your actual admin credentials check or API call
-    if (form.username === "admin" && form.password === "admin123") {
-      // Redirect or set admin session here
-      alert("Login successful!");
-    } else {
-      setError("Invalid username or password");
+    setError("");
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/admin/login`,
+        { email: form.email, password: form.password }
+      );
+      const token = res.data.token;
+        localStorage.setItem("token", token);
+      window.location.href = "/AdminDashBoard";
+      console.log(token);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "80px auto", padding: 24, border: "1px solid #ccc", borderRadius: 8 }}>
-      <h2>Admin Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 16 }}>
-          <label>
-            Username
-            <input
-              type="text"
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              required
-              style={{ width: "100%", padding: 8, marginTop: 4 }}
-            />
-          </label>
-        </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>
-            Password
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              style={{ width: "100%", padding: 8, marginTop: 4 }}
-            />
-          </label>
-        </div>
-        {error && <div style={{ color: "red", marginBottom: 12 }}>{error}</div>}
-        <button type="submit" style={{ width: "100%", padding: 10 }}>
-          Login
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-blue-200">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">Admin Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-5">
+            <label className="block text-gray-700 font-medium mb-2">
+              Email
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                autoComplete="email"
+              />
+            </label>
+          </div>
+          <div className="mb-5">
+            <label className="block text-gray-700 font-medium mb-2">
+              Password
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                autoComplete="current-password"
+              />
+            </label>
+          </div>
+          {error && (
+            <div className="mb-4 text-red-600 text-center font-semibold">
+              {error}
+            </div>
+          )}
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
