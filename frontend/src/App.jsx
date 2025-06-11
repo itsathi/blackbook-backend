@@ -8,17 +8,17 @@ import NotFoundPage from "./pages/NotFoundPage";
 import Start from "./pages/Start";
 import Home from "./pages/Home";
 import About from "./pages/about";
-import AdminDashboard from "./pages/admindashboard";
 import Userprofile from "./pages/userprofile";
 import BeatDetail from "./pages/BeatDetail";
-import PackDetail from "./pages/PackDetail";
 import { CartProvider } from "./contexts/CartContext";
 import CartPage from "./components/CartPage";
 import CheckoutPage from "./components/CheckoutPage";
 import Beats from "./pages/beats";
-import Packs from "./pages/pack";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import GauriPaighanReleases from "./components/GauriPaighanReleases";
+import AdminDashBoard from "./pages/admindashboard";
+import Releases from "./pages/releases";
+
 
 function App() {
   return (
@@ -32,16 +32,16 @@ function App() {
           <Route path="/login" element={<UserLoginPage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
-          {/* Catch-all route for 404 Not Found. This must be the last route. */}
+          
           <Route path="*" element={<NotFoundPage />} />
-          <Route path="/AdminDashBoard" element={<AdminDashboard />} />
+          <Route path="/admin/dashboard"element={<AdminDashBoard/>}/>
           <Route path="/Userprofile" element={<Userprofile />} />
           <Route path="/beats/:id" element={<BeatDetail />} />
-          <Route path="/packs/:id" element={<PackDetail />} />
+    
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage/>} />
           <Route path="/beats" element={<Beats/>}/>
-          <Route path="/packs" element={<Packs/>}/>
+          <Route path="/releases" element={<Releases/>}/>
           <Route path="/order-confirmation" element={<OrderConfirmationPage/>}/>
           <Route path="/music-releases" element={<GauriPaighanReleases />} />
         </Routes>
@@ -51,3 +51,4 @@ function App() {
 }
 
 export default App;
+
