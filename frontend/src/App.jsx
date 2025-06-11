@@ -17,8 +17,8 @@ import Beats from "./pages/beats";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import GauriPaighanReleases from "./components/GauriPaighanReleases";
 import AdminDashBoard from "./pages/admindashboard";
-
-
+import Releases from "./pages/releases";
+import UserProfilePage from "./pages/userprofile";
 
 function App() {
   return (
@@ -41,9 +41,10 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage/>} />
           <Route path="/beats" element={<Beats/>}/>
-         
+          <Route path="/releases" element={<Releases/>}/>
           <Route path="/order-confirmation" element={<OrderConfirmationPage/>}/>
           <Route path="/music-releases" element={<GauriPaighanReleases />} />
+            <Route path="/userprofile" element={<UserProfilePage/>} />
         </Routes>
       </CartProvider>
     </div>
